@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIP - Session Initiation Protocol &mdash; pyVoIP 1.6.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f5333bb9"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="RTP - Real-time Transport Protocol" href="RTP.html" />
+    <link rel="prev" title="VoIP - The Bridge Between SIP and RTP" href="VoIP.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyVoIP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Globals.html">Global Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="VoIP.html">VoIP - The Bridge Between SIP and RTP</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SIP - Session Initiation Protocol</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#errors">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#enums">Enums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sipclient">SIPClient</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sipmessage">SIPMessage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="RTP.html">RTP - Real-time Transport Protocol</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyVoIP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">SIP - Session Initiation Protocol</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/SIP.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sip-session-initiation-protocol">
+<h1>SIP - Session Initiation Protocol<a class="headerlink" href="#sip-session-initiation-protocol" title="Link to this heading"></a></h1>
+<p>The SIP module receives, parses, and responds to incoming SIP requests/messages.  If appropriate, it then forwards them to the <em>callback</em> method of <a class="reference internal" href="VoIP.html#voipphone"><span class="std std-ref">VoIPPhone</span></a>.</p>
+<section id="errors">
+<h2>Errors<a class="headerlink" href="#errors" title="Link to this heading"></a></h2>
+<p>There are two errors under <code class="docutils literal notranslate"><span class="pre">pyVoIP.SIP</span></code>.</p>
+<dl class="simple" id="invalidaccountinfoerror">
+<dt><em>exception</em> SIP.<strong>InvalidAccountInfoError</strong></dt><dd><p>This is thrown when <a class="reference internal" href="#sipclient"><span class="std std-ref">SIPClient</span></a> gets a bad response when trying to register with the PBX/VoIP server.  This error also kills the SIP REGISTER thread, so you will need to call SIPClient.stop() then SIPClient.start().</p>
+</dd>
+</dl>
+<dl class="simple" id="sip-parse-error">
+<dt><em>exception</em> SIP.<strong>SIPParseError</strong></dt><dd><p>This is thrown when <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a> is unable to parse a SIP message/request.</p>
+</dd>
+</dl>
+</section>
+<section id="enums">
+<span id="id1"></span><h2>Enums<a class="headerlink" href="#enums" title="Link to this heading"></a></h2>
+<dl>
+<dt>SIP.<strong>SIPMessageType</strong></dt><dd><p>SIPMessageType is an IntEnum with two attributes.  It’s stored in <code class="docutils literal notranslate"><span class="pre">SIPMessage.type</span></code> to effectively parse the message.</p>
+<dl class="simple">
+<dt>SIPMessageType.<strong>MESSAGE</strong></dt><dd><p>This SIPMessageType is used to signify the message was a SIP request.</p>
+</dd>
+<dt>SIPMessageType.<strong>RESPONSE</strong></dt><dd><p>This SIPMessageType is used to signify the message was a SIP response.</p>
+</dd>
+</dl>
+</dd>
+<dt>SIP.<strong>SIPStatus</strong></dt><dd><p>SIPStatus is used for <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>’s with SIPMessageType.RESPONSE.  They will not all be listed here, but a complete list can be found on <a class="reference external" href="https://en.wikipedia.org/wiki/List_of_SIP_response_codes">Wikipedia</a>.  SIPStatus has the following attributes:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>status.<strong>value</strong></dt><dd><p>This is the integer value of the status.  For example, <code class="docutils literal notranslate"><span class="pre">SIPStatus.OK.value</span></code> is equal to <code class="docutils literal notranslate"><span class="pre">int(200)</span></code>.</p>
+</dd>
+<dt>status.<strong>phrase</strong></dt><dd><p>This is the string value of the status, usually written next to the number in a SIP response. For example, <code class="docutils literal notranslate"><span class="pre">SIPStatus.TRYING.phrase</span></code> is equal to <code class="docutils literal notranslate"><span class="pre">'Trying'</span></code>.</p>
+</dd>
+<dt>status.<strong>description</strong></dt><dd><p>This is the string value of the description of the status, it can be useful for debugging.  For example, <code class="docutils literal notranslate"><span class="pre">SIPStatus.OK.description</span></code> is equal to <code class="docutils literal notranslate"><span class="pre">'Request</span> <span class="pre">successful'</span></code>  Not all responses have a description.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Here are a few common SIPStatus’ and their attributes in the order of value, phrase, description:</p>
+<dl class="simple">
+<dt>SIPStatus.<strong>TRYING</strong></dt><dd><p>100, ‘Trying’, ‘Extended search being performed, may take a significant time’</p>
+</dd>
+<dt>SIPStatus.<strong>RINGING</strong></dt><dd><p>180, ‘Ringing’, ‘Destination user agent received INVITE, and is alerting user of call’</p>
+</dd>
+<dt>SIPStatus.<strong>OK</strong></dt><dd><p>200, ‘OK’, ‘Request successful’</p>
+</dd>
+<dt>SIPStatus.<strong>BUSY_HERE</strong></dt><dd><p>486, ‘Busy Here’, ‘Callee is busy’</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<section id="sipclient">
+<span id="id2"></span><h3>SIPClient<a class="headerlink" href="#sipclient" title="Link to this heading"></a></h3>
+<p>The SIPClient class is used to communicate with the PBX/VoIP server.  It is responsible for registering with the server, and receiving phone calls.</p>
+<dl>
+<dt><em>class</em> SIP.<strong>SIPClient</strong>(server: str, port: int, username: str, password: str, myIP=”0.0.0.0”, myPort=5060, callCallback: Optional[Callable[[SIPMessage], None]] = None)</dt><dd><blockquote>
+<div><p>The <em>server</em> argument is your PBX/VoIP server’s IP.</p>
+<p>The <em>port</em> argument is your PBX/VoIP server’s port.</p>
+<p>The <em>username</em> argument is your SIP account username on the PBX/VoIP server.</p>
+<p>The <em>password</em> argument is your SIP account password on the PBX/VoIP server.</p>
+<p>The <em>myIP</em> argument is used to bind a socket and receive incoming SIP requests and responses.</p>
+<p>The <em>myPort</em> argument is the port SIPClient will bind to, to receive incoming SIP requests and responses. The default for this protocol is port 5060, but any port can be used.</p>
+<p>The <em>callCallback</em> argument is the callback function for <a class="reference internal" href="VoIP.html#voipphone"><span class="std std-ref">VoIPPhone</span></a>.  VoIPPhone will process the SIP request, and perform the appropriate actions.</p>
+</div></blockquote>
+<dl>
+<dt><strong>recv</strong>() -&gt; None</dt><dd><p>This method is called by SIPClient.start() and is responsible for receiving and parsing through SIP requests.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>parseMessage</strong>(message: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; None</dt><dd><p><em>Deprecated.</em> Please use <code class="docutils literal notranslate"><span class="pre">parse_message</span></code> instead.</p>
+</dd>
+<dt><strong>parse_message</strong>(message: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; None</dt><dd><p>This method is called by SIPClient.recv() and is responsible for parsing through SIP responses.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>start</strong>() -&gt; None</dt><dd><p>This method is called by <a class="reference internal" href="VoIP.html#voipphone"><span class="std std-ref">VoIPPhone</span></a>.start().  It starts the REGISTER and recv() threads.  It is also what initiates the bound port.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>stop</strong>() -&gt; None</dt><dd><p>This method is called by <a class="reference internal" href="VoIP.html#voipphone"><span class="std std-ref">VoIPPhone</span></a>.stop(). It stops the REGISTER and recv() threads.  It will also close the bound port.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>genCallID</strong>() -&gt; str</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>gen_call_id</strong>() -&gt; str</dt><dd><p>This method is called by other ‘gen’ methods when a new Call-ID header is needed.  See <a class="reference external" href="https://tools.ietf.org/html/rfc3261#section-20.8">RFC 3261 Section 20.8</a>.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>lastCallID</strong>() -&gt; str</dt><dd><p><em>Deprecated.</em>  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>last_call_id</strong>() -&gt; str</dt><dd><p>This method is called by other ‘gen’ methods when the last Call-ID header is needed.  See <a class="reference external" href="https://tools.ietf.org/html/rfc3261#section-20.8">RFC 3261 Section 20.8</a>.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>genTag</strong>() -&gt; str</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>gen_tag</strong>() -&gt; str</dt><dd><p>This method is called by other ‘gen’ methods when a new tag is needed. See <a class="reference external" href="https://tools.ietf.org/html/rfc3261#section-8.2.6.2">RFC 3261 Section 8.2.6.2</a>.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>genSIPVersionNotSupported</strong>() -&gt; str</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>gen_sip_version_not_supported</strong>() -&gt; str</dt><dd><p>This method is called by the recv() thread when it has received a SIP message that is not SIP version 2.0.</p>
+</dd>
+<dt><strong>genAuthorization</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; bytes</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>gen_authorization</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; bytes</dt><dd><p>This calculates the authroization hash in response to the WWW-Authenticate header.  See <a class="reference external" href="https://tools.ietf.org/html/rfc3261#section-20.7">RFC 3261 Section 20.7</a>.  The <em>request</em> argument should be a 401 Unauthorized response.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>genRegister</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>, deregister: bool = False) -&gt; str</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>gen_register</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>, deregister: bool = False) -&gt; str</dt><dd><p>This method generates a SIP REGISTER request. The <em>request</em> argument should be a 401 Unauthorized response.  If <em>deregister</em> is set to true, a SIP DE-REGISTER request is generated instead.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>genBusy</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; str</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>gen_busy</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; str</dt><dd><p>This method generates a SIP 486 ‘Busy Here’ response.  The <em>request</em> argument should be a SIP INVITE request.</p>
+</dd>
+<dt><strong>genOk</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; str</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>gen_ok</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; str</dt><dd><p>This method generates a SIP 200 ‘Ok’ response.  The <em>request</em> argument should be a SIP BYE request.</p>
+</dd>
+<dt><strong>genInvite</strong>(number: str, sess_id: str, ms: dict[int, dict[str, RTP.<a class="reference internal" href="RTP.html#payload-type"><span class="std std-ref">PayloadType</span></a>]], sendtype: RTP.<a class="reference internal" href="RTP.html#transmittype"><span class="std std-ref">RTP.TransmitType</span></a>, branch: str, call_id: str) -&gt; str</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>gen_invite</strong>(number: str, sess_id: str, ms: dict[int, dict[str, RTP.<a class="reference internal" href="RTP.html#payload-type"><span class="std std-ref">PayloadType</span></a>]], sendtype: RTP.<a class="reference internal" href="RTP.html#transmittype"><span class="std std-ref">RTP.TransmitType</span></a>, branch: str, call_id: str) -&gt; str</dt><dd><p>This method generates a SIP INVITE request.  This is called by SIPClient.invite().</p>
+<p>The <em>number</em> argument must be the number being called as a string.</p>
+<p>The <em>sess_id</em> argument must be a unique number.</p>
+<p>The <em>ms</em> argument is a dictionary of the media types to be used.  Currently only PCMU and telephone-event is supported.</p>
+<p>The <em>sendtype</em> argument must be an instance of <a class="reference internal" href="RTP.html#transmittype"><span class="std std-ref">RTP.TransmitType</span></a>.</p>
+<p>The <em>branch</em> argument must be a unique string starting with “z9hG4bK”.  See <a class="reference external" href="https://tools.ietf.org/html/rfc3261#section-8.1.1.7">RFC 3261 Section 8.1.1.7</a>.</p>
+<p>The <em>call_id</em> argument must be a unique string.  See <a class="reference external" href="https://tools.ietf.org/html/rfc3261#section-8.1.1.4">RFC 3261 Section 8.1.1.4</a>.</p>
+</dd>
+<dt><strong>genRinging</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; str</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>gen_ringing</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; str</dt><dd><p>This method generates a SIP 180 ‘Ringing’ response.  The <em>request</em> argument should be a SIP INVITE request.</p>
+</dd>
+<dt><strong>genAnswer</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>, sess_id: str, ms: list[dict[str, Any]], sendtype: RTP.<a class="reference internal" href="RTP.html#transmittype"><span class="std std-ref">RTP.TransmitType</span></a>)</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>gen_answer</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>, sess_id: str, ms: list[dict[str, Any]], sendtype: RTP.<a class="reference internal" href="RTP.html#transmittype"><span class="std std-ref">RTP.TransmitType</span></a>)</dt><dd><p>This method generates a SIP 200 ‘OK’ response.  Which, when in reply to an INVITE request, tells the server the <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a> has answered.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+<p>The <em>request</em> argument should be a SIP INVITE request.</p>
+<p>The <em>sess_id</em> argument should be a string casted integer.  This will be used for the SDP o tag.  See <a class="reference external" href="https://tools.ietf.org/html/rfc4566#section-5.2">RFC 4566 Section 5.2</a>.  The <em>sess_id</em> argument will also server as the <em>&lt;sess-version&gt;</em> argument in the SDP o tag.</p>
+<p>The <em>ms</em> argument should be a list of parsed SDP m tags, found in the <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>.body attribute.  This is used to generate the response SDP m tags.   See <a class="reference external" href="https://tools.ietf.org/html/rfc4566#section-5.14">RFC 4566 Section 5.14</a>.</p>
+<p>The <em>sendtype</em> argument should be a RTP.<a class="reference internal" href="RTP.html#transmittype"><span class="std std-ref">TransmitType</span></a> enum.  This will be used to generate the SDP a tag.   See <a class="reference external" href="https://tools.ietf.org/html/rfc4567#section-6">RFC 4567 Section 6</a>.</p>
+</dd>
+<dt><strong>genBye</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; str</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>gen_bye</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; str</dt><dd><p>This method generates a SIP BYE request.  This is used to end a call. The <em>request</em> argument should be a SIP INVITE request.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>genAck</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; str</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>gen_ack</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; str</dt><dd><p>This method generates a SIP ACK response.  The <em>request</em> argument should be a SIP 401 response.</p>
+</dd>
+<dt><strong>invite</strong>(number: str, ms: dict[int, dict[str, RTP.<a class="reference internal" href="RTP.html#payload-type"><span class="std std-ref">PayloadType</span></a>]], sendtype: RTP.<a class="reference internal" href="RTP.html#transmittype"><span class="std std-ref">RTP.TransmitType</span></a>)</dt><dd><p>This method generates a SIP INVITE request.  This method is called by <a class="reference internal" href="VoIP.html#voipphone"><span class="std std-ref">VoIPPhone</span></a>.call().</p>
+<p>The <em>number</em> argument must be the number being called as a string.</p>
+<p>The <em>ms</em> argument is a dictionary of the media types to be used.  Currently only PCMU and telephone-event is supported.</p>
+<p>The <em>sendtype</em> argument must be an instance of <a class="reference internal" href="RTP.html#transmittype"><span class="std std-ref">RTP.TransmitType</span></a>.</p>
+</dd>
+<dt><strong>bye</strong>(request: <a class="reference internal" href="#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; None</dt><dd><p>This method is called by <a class="reference internal" href="VoIP.html#voipcall"><span class="std std-ref">VoIPCall</span></a>.hangup().  It calls genBye(), and then transmits the generated request.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>deregister</strong>() -&gt; bool</dt><dd><p>This method is called by SIPClient.stop() after the REGISTER thread is stopped.  It will generate and transmit a REGISTER request with an Expiration of zero.  Telling the PBX/VoIP server it is turning off.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>register</strong>() -&gt; bool</dt><dd><p>This method is called by the REGISTER thread.  It will generate and transmit a REGISTER request telling the PBX/VoIP server that it will be online for at least 300 seconds.  The REGISTER thread will call this function every 295 seconds.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="sipmessage">
+<span id="id4"></span><h3>SIPMessage<a class="headerlink" href="#sipmessage" title="Link to this heading"></a></h3>
+<p>The SIPMessage class is used to parse SIP requests and responses and makes them easily processed by other classes.</p>
+<dl>
+<dt><em>class</em> SIP.<strong>SIPMessage</strong>(data: bytes)</dt><dd><blockquote>
+<div><p>The <em>data</em> argument is the SIP message in bytes.  It is then passed to SIPMessage.parse().</p>
+</div></blockquote>
+<p>SIPMessage has the following attributes:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>SIPMessage.<strong>heading</strong></dt><dd><p>This attribute is the first line of the SIP message as a string.  It contains the SIP Version, and the method/response code.</p>
+</dd>
+<dt>SIPMessage.<strong>type</strong></dt><dd><p>This attribute will be a <a class="reference internal" href="#enums"><span class="std std-ref">SIPMessageType</span></a>.</p>
+</dd>
+<dt>SIPMessage.<strong>status</strong></dt><dd><p>This attribute will be a <a class="reference internal" href="#enums"><span class="std std-ref">SIPStatus</span></a>.  It will be set to <code class="docutils literal notranslate"><span class="pre">int(0)</span></code> if the message is a request.</p>
+</dd>
+<dt>SIPMessage.<strong>method</strong></dt><dd><p>This attribute will be a string representation of the method.  It will be set to None if the message is a response.</p>
+</dd>
+<dt>SIPMessage.<strong>headers</strong></dt><dd><p>This attribute is a dictionary of all the headers in the request, and their parsed values.</p>
+</dd>
+<dt>SIPMessage.<strong>body</strong></dt><dd><p>This attribute is a dictionary of all the SDP tags in the request, and their parsed values.</p>
+</dd>
+<dt>SIPMessage.<strong>authentication</strong></dt><dd><p>This attribute is a dictionary of a parsed Authentication header.  There are two authentication headers: Authorization, and WWW-Authenticate.  See RFC 3261 Sections <a class="reference external" href="https://tools.ietf.org/html/rfc3261#section-20.7">20.7</a> and <a class="reference external" href="https://tools.ietf.org/html/rfc3261#section-20.44">20.44</a> respectively.</p>
+</dd>
+<dt>SIPMessage.<strong>raw</strong></dt><dd><p>This attribute is an unparsed version of the <em>data</em> argument, in bytes.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="simple">
+<dt><strong>summary</strong>() -&gt; str</dt><dd><p>This method returns a string representation of the SIP request.</p>
+</dd>
+<dt><strong>parse</strong>(data: bytes) -&gt; None</dt><dd><p>This method is called by the initialization of the class.  It decides the SIPMessageType, and sends it to the corresponding parse function.  <em>Data</em> is the original <em>data</em> argument in the initialization of the class.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>parseSIPResponse</strong>(data: bytes) -&gt; None</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>parse_sip_response</strong>(data: bytes) -&gt; None</dt><dd><p>This method is called by parse().  It sets the <em>header</em>, <em>version</em>, and <em>status</em> attributes and may raise a <a class="reference internal" href="#sip-parse-error"><span class="std std-ref">SIPParseError</span></a> if the SIP response is an unsupported SIP version.  It then calls parseHeader() for each header in the request. <em>Data</em> is the original <em>data</em> argument in the initialization of the class.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>parseSIPMessage</strong>(data: bytes) -&gt; None</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>parse_sip_message</strong>(data: bytes) -&gt; None</dt><dd><p>This method is called by parse().  It sets the <em>header</em>, <em>version</em>, and <em>method</em> attributes and may raise a <a class="reference internal" href="#sip-parse-error"><span class="std std-ref">SIPParseError</span></a> if the SIP request is an unsupported SIP version.  It then calls parseHeader() and parseBody() for each header or tag in the request respectively. <em>Data</em> is the original <em>data</em> argument in the initialization of the class.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>parseHeader</strong>(header: str, data: str) -&gt; None</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>parse_header</strong>(header: str, data: str) -&gt; None</dt><dd><p>This method is called by parseSIPResponse() and parseSIPMessage().  The <em>header</em> argument is the name of the header, i.e. ‘Call-ID’ or ‘CSeq’, represented as a string.  The <em>data</em> argument is the value of the header, i.e. ‘Ogq-T7iBmNozoUu3GL9Lvg..’ or ‘1 INVITE’, represented as a string.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>parseBody</strong>(header: str, data: str) -&gt; None</dt><dd><p><em>Deprecated.</em> <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>parse_body</strong>(header: str, data: str) -&gt; None</dt><dd><p>This method is called by parseSIPResponse() and parseSIPMessage().  The <em>header</em> argument is the name of the SDP tag, i.e. ‘m’ or ‘a’, represented as a string.  The <em>data</em> argument is the value of the header, i.e. ‘audio 56704 RTP/AVP 0’ or ‘sendrecv’, represented as a string.  <strong>This should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="VoIP.html" class="btn btn-neutral float-left" title="VoIP - The Bridge Between SIP and RTP" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="RTP.html" class="btn btn-neutral float-right" title="RTP - Real-time Transport Protocol" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tayler Porter.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

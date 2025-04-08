@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoIP - The Bridge Between SIP and RTP &mdash; pyVoIP 1.6.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f5333bb9"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SIP - Session Initiation Protocol" href="SIP.html" />
+    <link rel="prev" title="Global Variables" href="Globals.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyVoIP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Globals.html">Global Variables</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">VoIP - The Bridge Between SIP and RTP</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#errors">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#enums">Enums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#voipcall">VoIPCall</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#voipphone">VoIPPhone</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SIP.html">SIP - Session Initiation Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RTP.html">RTP - Real-time Transport Protocol</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyVoIP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">VoIP - The Bridge Between SIP and RTP</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/VoIP.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="voip-the-bridge-between-sip-and-rtp">
+<h1>VoIP - The Bridge Between SIP and RTP<a class="headerlink" href="#voip-the-bridge-between-sip-and-rtp" title="Link to this heading"></a></h1>
+<p>The VoIP module coordinates between the SIP and RTP modules in order to create an effective Voice over Internet Protocol system.  The VoIP system is made for your convenience, and if you have a particularly intricate situation, you can use the SIP and RTP modules independently and create your own version of the VoIP module.  If you choose to use the VoIP module, this section will explain how.</p>
+<section id="errors">
+<h2>Errors<a class="headerlink" href="#errors" title="Link to this heading"></a></h2>
+<p>There are two errors under <code class="docutils literal notranslate"><span class="pre">pyVoIP.VoIP</span></code>.</p>
+<dl class="simple" id="invalidstateerror">
+<dt><em>exception</em> VoIP.<strong>InvalidStateError</strong></dt><dd><p>This is thrown by <a class="reference internal" href="#voipcall"><span class="std std-ref">VoIPCall</span></a> when you try to perform an action that cannot be performed during the current <a class="reference internal" href="#callstate"><span class="std std-ref">CallState</span></a>.  For example denying a call that has already been answered, hanging up a call that hasn’t been answered yet, or has already been ended.</p>
+</dd>
+<dt><em>exception</em> VoIP.<strong>InvalidRangeError</strong></dt><dd><p>This is thrown by <a class="reference internal" href="#voipphone"><span class="std std-ref">VoIPPhone</span></a> when you define the rtpPort ranges as rtpPortLow &gt; rtpPortHigh.  However, this is not checked by <a class="reference internal" href="#voipcall"><span class="std std-ref">VoIPCall</span></a>, so if you are using your own class instead of VoIPPhone, make sure these ranges are correct.</p>
+</dd>
+<dt><em>exception</em> VoIP.<strong>NoPortsAvailableError</strong></dt><dd><p>This is thrown when a call is attempting to be initiated but no ports are available.</p>
+</dd>
+</dl>
+</section>
+<section id="enums">
+<h2>Enums<a class="headerlink" href="#enums" title="Link to this heading"></a></h2>
+<dl id="callstate">
+<dt>VoIP.<strong>CallState</strong></dt><dd><p>CallState is an Enum with four attributes.</p>
+<dl>
+<dt>CallState.<strong>DIALING</strong></dt><dd><p>This CallState is used to describe when a <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a> has originated a call to a <a class="reference internal" href="index.html#term-client"><span class="xref std std-term">client</span></a>, but it has yet to be answered.</p>
+</dd>
+<dt>CallState.<strong>RINGING</strong></dt><dd><p>This CallState is used to describe when a <a class="reference internal" href="index.html#term-client"><span class="xref std std-term">client</span></a> is calling, but the call has yet to be answered.</p>
+<p>In this state, you can use <code class="docutils literal notranslate"><span class="pre">VoIPCall.answer()</span></code> or <code class="docutils literal notranslate"><span class="pre">VoIPCall.deny()</span></code>.</p>
+</dd>
+<dt>CallState.<strong>ANSWRED</strong></dt><dd><p>This CallState is used to describe when a call has been answered and is active.</p>
+<p>In this state, you can use <code class="docutils literal notranslate"><span class="pre">VoIPCall.hangup()</span></code>.</p>
+</dd>
+<dt>CallState.<strong>ENDED</strong></dt><dd><p>This CallState is used to describe when a call has been terminated.</p>
+<p>In this state, you can not use any functions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl>
+<dt>VoIP.<strong>PhoneStatus</strong></dt><dd><p>PhoneStatus is an Enum with five attributes.</p>
+<dl class="simple">
+<dt>PhoneStatus.<strong>INACTIVE</strong></dt><dd><p>This PhoneStatus is used when <code class="docutils literal notranslate"><span class="pre">VoIPPhone.start()</span></code> has not been called, or after the phone has fully stopped after calling <code class="docutils literal notranslate"><span class="pre">VoIPPhone.stop()</span></code>.</p>
+</dd>
+<dt>PhoneStatus.<strong>REGISTERING</strong></dt><dd><p>This PhoneStatus is used when <code class="docutils literal notranslate"><span class="pre">VoIPPhone.start()</span></code> has been called, but has not finished starting.</p>
+</dd>
+<dt>PhoneStatus.<strong>REGISTERED</strong></dt><dd><p>This PhoneStatus is used when <code class="docutils literal notranslate"><span class="pre">VoIPPhone</span></code> has finished starting successfully, and is ready for use.</p>
+</dd>
+<dt>PhoneStatus.<strong>DEREGISTERING</strong></dt><dd><p>This PhoneStatus is used when <code class="docutils literal notranslate"><span class="pre">VoIPPhone.stop()</span></code> has been called, but has not finished stopping.</p>
+</dd>
+<dt>PhoneStatus.<strong>FAILED</strong></dt><dd><p>This PhoneStatus is used when <code class="docutils literal notranslate"><span class="pre">VoIPPhone.start()</span></code> has been called, but failed to start due to an error.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<section id="voipcall">
+<span id="id1"></span><h3>VoIPCall<a class="headerlink" href="#voipcall" title="Link to this heading"></a></h3>
+<p>The VoIPCall class is used to represent a single VoIP Session, which may be to multiple <a class="reference internal" href="index.html#term-client"><span class="xref std std-term">clients</span></a>.</p>
+<dl>
+<dt><em>class</em> VoIP.<strong>VoIPCall</strong>(phone: <a class="reference internal" href="#voipphone"><span class="std std-ref">VoIPPhone</span></a>, request: <a class="reference internal" href="SIP.html#sipmessage"><span class="std std-ref">SIPMessage</span></a>, session_id: int, myIP: str, rtpPortLow: int, rtpPortHigh: int)</dt><dd><blockquote>
+<div><p>The <em>phone</em> argument is the initating instance of <a class="reference internal" href="#voipphone"><span class="std std-ref">VoIPPhone</span></a>.</p>
+<p>The <em>callstate</em> arguement is the initiating <a class="reference internal" href="#callstate"><span class="std std-ref">CallState</span></a>.</p>
+<p>The <em>request</em> argument is the <a class="reference internal" href="SIP.html#sipmessage"><span class="std std-ref">SIPMessage</span></a> representation of the SIP INVITE request from the VoIP server.</p>
+<p>The <em>session_id</em> argument is a unique code used to identify the session with <a class="reference external" href="https://tools.ietf.org/html/rfc4566#section-5.2">SDP</a> when answering the call.</p>
+<p>The <em>myIP</em> argument is the IP address it will pass to <a class="reference internal" href="RTP.html#rtpclient"><span class="std std-ref">RTPClient</span></a>’s to bind to.</p>
+<p>The <em>ms</em> arguement is a dictionary with int as the key and a <a class="reference internal" href="RTP.html#payload-type"><span class="std std-ref">PayloadType</span></a> as the value.  This is only used when originating the call.</p>
+</div></blockquote>
+<dl>
+<dt><strong>dtmfCallback</strong>(code: str) -&gt; None</dt><dd><p><em>Deprecated.</em> Please use <code class="docutils literal notranslate"><span class="pre">dtmf_callback</span></code> instead.</p>
+</dd>
+<dt><strong>dtmf_callback</strong>(code: str) -&gt; None</dt><dd><p>This method is called by <a class="reference internal" href="RTP.html#rtpclient"><span class="std std-ref">RTPClient</span></a>’s when a telephone-event DTMF message is received.  The <em>code</em> argument is a string.  It should be an Event in complinace with <a class="reference external" href="https://tools.ietf.org/html/rfc4733#section-3.2">RFC 4733 Section 3.2</a>.</p>
+</dd>
+<dt><strong>getDTMF</strong>(length=1) -&gt; str</dt><dd><p><em>Deprecated.</em> Please use <code class="docutils literal notranslate"><span class="pre">get_dtmf</span></code> instead.</p>
+</dd>
+<dt><strong>get_dtmf</strong>(length=1) -&gt; str</dt><dd><p>This method can be called get the next pressed DTMF key.  DTMF’s are stored in an <code class="docutils literal notranslate"><span class="pre">io.StringIO</span></code> and act as a stack.  Meaning if the <a class="reference internal" href="index.html#term-client"><span class="xref std std-term">client</span></a> presses the numbers 1-9-5 you’ll have the following output:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">VoIPCall</span><span class="o">.</span><span class="n">get_dtmf</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;1&#39;</span>
+<span class="n">VoIPCall</span><span class="o">.</span><span class="n">get_dtmf</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;95&#39;</span>
+<span class="n">VoIPCall</span><span class="o">.</span><span class="n">get_dtmf</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>As you can see, calling this method when there a key has not been pressed returns an empty string.</p>
+</dd>
+<dt><strong>answer</strong>() -&gt; None</dt><dd><p>Answers the call if the phone’s state is CallState.RINGING.</p>
+</dd>
+<dt><strong>answered</strong>(request: <a class="reference internal" href="SIP.html#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; None</dt><dd><p>This function is called by <a class="reference internal" href="SIP.html#sipclient"><span class="std std-ref">SIPClient</span></a> when a call originated by the <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a> has been answered by the <a class="reference internal" href="index.html#term-client"><span class="xref std std-term">client</span></a>.</p>
+</dd>
+<dt><strong>deny</strong>() -&gt; None</dt><dd><p>Denies the call if the phone’s state is CallState.RINGING.</p>
+</dd>
+<dt><strong>hangup</strong>() -&gt; None</dt><dd><p>Ends the call if the phone’s state is CallState.ANSWRED.</p>
+</dd>
+<dt><strong>bye</strong>() -&gt; None</dt><dd><p>Ends the call but does not send a SIP BYE message to the SIP server.  This function is used to end the call on the server side when the client ended the call.  <strong>THE</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">USER</span></a> <strong>SHOUND NOT CALL THIS FUNCTION OR THE</strong> <a class="reference internal" href="index.html#term-client"><span class="xref std std-term">CLIENT</span></a> <strong>WILL BE LEFT ON THE LINE WITH NO RESPONSE. CALL HANGUP() INSTEAD.</strong></p>
+</dd>
+<dt><strong>writeAudio</strong>(data: bytes) -&gt; None</dt><dd><p><em>Deprecated.</em> Please use <code class="docutils literal notranslate"><span class="pre">write_audio</span></code> instead.</p>
+</dd>
+<dt><strong>write_audio</strong>(data: bytes) -&gt; None</dt><dd><p>Writes linear/raw audio data to the transmit buffer before being encoded and sent.  The <em>data</em> argument MUST be bytes.  <strong>This audio must be linear/not encoded,</strong> <a class="reference internal" href="RTP.html#rtpclient"><span class="std std-ref">RTPClient</span></a> <strong>will encode it before transmitting.</strong></p>
+</dd>
+<dt><strong>readAudio</strong>(length=160, blocking=True) -&gt; bytes</dt><dd><p><em>Deprecated.</em> Please use <code class="docutils literal notranslate"><span class="pre">read_audio</span></code> instead.</p>
+</dd>
+<dt><strong>read_audio</strong>(length=160, blocking=True) -&gt; bytes</dt><dd><p>Reads linear/raw audio data from the received buffer.  Returns <em>length</em> amount of bytes.  Default length is 160 as that is the amount of bytes sent per PCMU/PCMA packet.  When <em>blocking</em> is set to true, this function will not return until data is available.  When <em>blocking</em> is set to false and data is not available, this function will return <code class="docutils literal notranslate"><span class="pre">b&quot;\x80&quot;</span> <span class="pre">*</span> <span class="pre">length</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="voipphone">
+<span id="id2"></span><h3>VoIPPhone<a class="headerlink" href="#voipphone" title="Link to this heading"></a></h3>
+<p>The VoIPPhone class is used to manage the <a class="reference internal" href="SIP.html#sipclient"><span class="std std-ref">SIPClient</span></a> class and create <a class="reference internal" href="#voipcall"><span class="std std-ref">VoIPCall</span></a>’s when there is an incoming call.  It then passes the VoIPCall as the argument in the callback.</p>
+<dl>
+<dt><em>class</em> VoIP.<strong>VoIPPhone</strong>(server: str, port: int, username: str, password: str, callCallback: Optional[Callable] = None, myIP: Optional[str] = None, sipPort=5060, rtpPortLow=10000, rtpPortHigh=20000)</dt><dd><blockquote>
+<div><p>The <em>server</em> argument is your PBX/VoIP server’s IP, represented as a string.</p>
+<p>The <em>port</em> argument is your PBX/VoIP server’s port, represented as an integer.</p>
+<p>The <em>username</em> argument is your SIP account username on the PBX/VoIP server, represented as a string.</p>
+<p>The <em>password</em> argument is your SIP account password on the PBX/VoIP server, represented as a string.</p>
+<p>The <em>callCallback</em> argument is your callback function that VoIPPhone will run when you receive a call.  The callback must take one argument, which will be a <a class="reference internal" href="#voipcall"><span class="std std-ref">VoIPCall</span></a>.  If left as None, the VoIPPhone will automatically respond to all incoming calls as Busy.</p>
+<p>The <em>myIP</em> argument is used to bind SIP and RTP ports to receive incoming calls.  If left as None, the VoIPPhone will bind to 0.0.0.0.</p>
+<p>The <em>sipPort</em> argument is the port SIP will bind to to receive SIP requests.  The default for this protocol is port 5060, but any port can be used.</p>
+<p>The <em>rtpPortLow</em> and <em>rtpPortHigh</em> arguments are used to generate random ports to use for audio transfer.  Per RFC 4566 Sections <a class="reference external" href="https://tools.ietf.org/html/rfc4566#section-5.7">5.7</a> and <a class="reference external" href="https://tools.ietf.org/html/rfc4566#section-5.14">5.14</a>, it can take multiple ports to fully communicate with other <a class="reference internal" href="index.html#term-client"><span class="xref std std-term">clients</span></a>, as such a large range is recommended.  If an invalid range is given, a <a class="reference internal" href="#invalidstateerror"><span class="std std-ref">InvalidStateError</span></a> will be thrown.</p>
+</div></blockquote>
+<dl class="simple">
+<dt><strong>callback</strong>(request: <a class="reference internal" href="SIP.html#sipmessage"><span class="std std-ref">SIPMessage</span></a>) -&gt; None</dt><dd><p>This method is called by the <a class="reference internal" href="SIP.html#sipclient"><span class="std std-ref">SIPClient</span></a> when an INVITE or BYE request is received.  This function then creates a <a class="reference internal" href="#voipcall"><span class="std std-ref">VoIPCall</span></a> or terminates it respectively.  When a VoIPCall is created, it will then pass it to the <em>callCallback</em> function as an argument.  If <em>callCallback</em> is set to None, this function replies as BUSY. <strong>This function should not be called by the</strong> <a class="reference internal" href="index.html#term-user"><span class="xref std std-term">user</span></a>.</p>
+</dd>
+<dt><strong>getStatus</strong>() -&gt; PhoneStatus</dt><dd><p><em>Deprecated.</em> Please use <code class="docutils literal notranslate"><span class="pre">get_status</span></code> instead.</p>
+</dd>
+<dt><strong>get_status</strong>() -&gt; PhoneStatus</dt><dd><p>This method returns the <span class="xref std std-ref">PhoneStatus</span>.</p>
+</dd>
+<dt><strong>request_port</strong>(blocking=True) -&gt; int</dt><dd><p>This method is called when a new port is needed to use in a <a class="reference internal" href="#voipcall"><span class="std std-ref">VoIPCall</span></a>.  If blocking is set to True, this will wait until a port is available.  Otherwise, it will raise NoPortsAvailableError.</p>
+</dd>
+<dt><strong>release_ports</strong>(call: Optional[VoIPCall] = None) -&gt; None</dt><dd><p>This method is called when a call ends.  If call is provided, it will only release the ports used by that <a class="reference internal" href="#voipcall"><span class="std std-ref">VoIPCall</span></a>.  Otherwise, it will iterate through all active calls, and release all ports that are no longer in use.</p>
+</dd>
+<dt><strong>start</strong>() -&gt; None</dt><dd><p>This method starts the <a class="reference internal" href="SIP.html#sipclient"><span class="std std-ref">SIPClient</span></a> class.  On failure, this will automatically call stop().</p>
+</dd>
+<dt><strong>stop</strong>() -&gt; None</dt><dd><p>This method ends all currently ongoing calls, then stops the <a class="reference internal" href="SIP.html#sipclient"><span class="std std-ref">SIPClient</span></a> class</p>
+</dd>
+<dt><strong>call</strong>(number: str) -&gt; <a class="reference internal" href="#voipcall"><span class="std std-ref">VoIPCall</span></a></dt><dd><p>Originates a call using PCMU and telephone-event. The <em>number</em> argument must be a string, and it returns a <a class="reference internal" href="#voipcall"><span class="std std-ref">VoIPCall</span></a> class in CallState.DIALING.  You should use a while loop to wait until the CallState is ANSWRED.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Globals.html" class="btn btn-neutral float-left" title="Global Variables" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="SIP.html" class="btn btn-neutral float-right" title="SIP - Session Initiation Protocol" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tayler Porter.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
